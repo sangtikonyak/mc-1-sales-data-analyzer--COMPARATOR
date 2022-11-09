@@ -8,6 +8,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -30,11 +33,11 @@ public class SalesDataAnalyzerTest {
     }
 
     @Test(expected = NumberFormatException.class)
-    public void givenWrongDataFormatThrowsNumberFormatException() {
+    public void givenWrongDataFormatThrowsNumberFormatException() throws IOException {
         salesDataAnalyzer.readFile(numberFormatFile);
     }
     @Test
-    public void givenSaleDetailsFileReturnTheNUmberOfSalesRecordObjects() throws ParseException {
+    public void givenSaleDetailsFileReturnTheNUmberOfSalesRecordObjects() throws ParseException, IOException {
 
         List<SalesRecord> output = salesDataAnalyzer.readFile(fileName);
         assertEquals("Sales record objects not returned correctly",99,output.size());
@@ -42,12 +45,12 @@ public class SalesDataAnalyzerTest {
     }
 
     @Test
-    public void givenSalesDetailsListReturnSortedListBySalesAmount(){
+    public void givenSalesDetailsListReturnSortedListBySalesAmount() throws IOException {
         List<SalesRecord> output = salesDataAnalyzer.readFile(fileName);
         assertEquals(1107.58,salesDataAnalyzer.getAllCustomersSortedByPurchaseAmount(output,new AmountComparator()).get(0).getAmount(),0);
     }
     @Test
-    public void givenSalesDetailsGetTopCustomerWhoSpentMaxTimeOnSite(){
+    public void givenSalesDetailsGetTopCustomerWhoSpentMaxTimeOnSite() throws IOException {
         List<SalesRecord> output = salesDataAnalyzer.readFile(fileName);
         SalesRecord salesRecord = salesDataAnalyzer.getTopCustomerWhoSpentMaxTimeOnSite(output,new TimeOnSiteComparator());
         assertEquals(169.2,salesRecord.getTime_on_site(),0);
